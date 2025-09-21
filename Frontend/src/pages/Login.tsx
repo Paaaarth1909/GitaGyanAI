@@ -53,6 +53,7 @@ export function Login() {
     if (data.success) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", "guest");
+      alert("Logged In as Guest, 2 min access")
       // localStorage.setItem("exp", data.exp * 1000); 
 
       setTimeout(() => {
