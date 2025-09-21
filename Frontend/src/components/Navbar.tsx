@@ -7,6 +7,8 @@ import {
   LogOutIcon,
   Volume2Icon,
   VolumeOffIcon,
+  MenuIcon,
+  XIcon,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -23,11 +25,12 @@ import { Language, useLanguage } from "@/context/Language";
 export const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const { language, setLanguage } = useLanguage();
 
-    const navItems = [
+  const navItems = [
     { label: "Ask Gita", icon: MessageCircle, path: "/chat" },
     { label: "About Gita", icon: Info, path: "/about" },
     { label: "Chapters", icon: Book, path: "/chapters" },
@@ -37,7 +40,7 @@ export const Navbar: React.FC = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("token");
-    navigate("/login"); 
+    navigate("/login");
   };
 
   const toggleSound = () => {
@@ -60,14 +63,14 @@ export const Navbar: React.FC = () => {
     <nav className="">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center">
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-2">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
                 <button
                   key={item.label}
                   onClick={() => navigate(item.path)}
-                  className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200 text-orange-700 hover:bg-orange-100 hover:text-orange-800"
+                  className="flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 text-orange-700 hover:bg-orange-100 hover:text-orange-800"
                 >
                   <Icon className="w-4 h-4" />
                   <span className="text-sm font-medium">{item.label}</span>
@@ -76,7 +79,7 @@ export const Navbar: React.FC = () => {
             })}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <Select
               value={language}
               onValueChange={(val: Language) => setLanguage(val)}
@@ -100,7 +103,6 @@ export const Navbar: React.FC = () => {
               </SelectContent>
             </Select>
 
-            {/* Flute Sound */}
             <audio ref={audioRef} src={Krishna_Flute} preload="auto" />
             <Button
               variant="outline"
@@ -110,7 +112,6 @@ export const Navbar: React.FC = () => {
               {isOpen ? <Volume2Icon /> : <VolumeOffIcon />}
             </Button>
 
-            {/* Logout */}
             <div className="relative group">
               <Button
                 variant="default"
@@ -123,25 +124,40 @@ export const Navbar: React.FC = () => {
                 Logout
               </p>
             </div>
-          </div>
 
-          {/* Mobile Nav */}
-          <div className="md:hidden flex items-center space-x-2">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.label}
-                  onClick={() => navigate(item.path)}
-                  className="p-2 rounded-lg transition-all duration-200 text-orange-700 hover:bg-orange-100"
-                >
-                  <Icon className="w-5 h-5" />
-                </button>
-              );
-            })}
+            <div className="md:hidden">
+              <Button
+                variant="outline"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="rounded-full w-8 h-8 text-orange-700 hover:bg-orange-100"
+              >
+                {mobileMenuOpen ? <XIcon /> : <MenuIcon />}
+              </Button>
+            </div>
           </div>
         </div>
       </div>
+
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white shadow-inner">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.label}
+                onClick={() => {
+                  navigate(item.path);
+                  setMobileMenuOpen(false);
+                }}
+                className="flex items-center px-4 py-3 border-b border-orange-200 text-orange-700 hover:bg-orange-100 w-full"
+              >
+                <Icon className="w-5 h-5 mr-2" />
+                <span className="font-medium">{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
     </nav>
   );
 };
