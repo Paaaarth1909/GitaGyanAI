@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Book, ChevronRight, Users } from 'lucide-react';
 
 const Chapters: React.FC = () => {
-  const [selectedChapter, setSelectedChapter] = useState(null);
+  const [selectedChapter, setSelectedChapter] = useState<number | null>(null);
 
   const chapters = [
     {
