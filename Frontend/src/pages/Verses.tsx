@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { BookOpen, ChevronRight } from 'lucide-react';
 
 const Verses = () => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedVerse, setSelectedVerse] = useState<string | null>(null);
 
   const featuredVerses = [
@@ -50,14 +49,6 @@ const Verses = () => {
     }
   ];
 
-  const filteredVerses = featuredVerses.filter(verse => {
-    const matchesSearch =
-      searchTerm === '' ||
-      verse.meaning.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      verse.english.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesSearch;
-  });
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
       <div className="max-w-7xl mx-auto px-4 py-12">
@@ -72,7 +63,7 @@ const Verses = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {filteredVerses.map((verse) => {
+          {featuredVerses.map((verse) => {
             const key = `${verse.chapter}-${verse.verse}`;
             const isSelected = selectedVerse === key;
 
