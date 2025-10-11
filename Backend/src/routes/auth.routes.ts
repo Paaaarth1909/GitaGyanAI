@@ -41,7 +41,7 @@ router.post('/', async (req, res) => {
 router.get('/auth/google', async(req,res) => {
     try{
         const params = new URLSearchParams({
-            client_id: "698443624904-f5hbb75u7v7k5il22onr25g38gsk873s.apps.googleusercontent.com",
+            client_id: process.env.Client_id as string,
             redirect_uri: redirectUri,
             response_type: 'code',
             scope: "openid email profile"
@@ -65,9 +65,9 @@ router.get('/auth/google/callback',async(req,res) => {
             },
             body: new URLSearchParams({
                 code: code as string,
-                client_id: "698443624904-f5hbb75u7v7k5il22onr25g38gsk873s.apps.googleusercontent.com",
-                client_secret:"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",
-                redirect_uri: "http://localhost:3000/auth/google/callback",
+                client_id: process.env.Client_id as string,
+                client_secret:process.env.Client_secret as string,
+                redirect_uri: redirectUri,
                 grant_type: "authorization_code"
             })
         })
