@@ -56,7 +56,6 @@ router.get('/auth/google', async(req,res) => {
 router.get('/auth/google/callback',async(req,res) => {
     const code = req.query.code
     if(!code) return res.status(400).json({message: "Authorization code not provided"})
-    
     try{
         const tokenResponse = await fetch("https://oauth2.googleapis.com/token",{
             method: "POST",
@@ -71,20 +70,16 @@ router.get('/auth/google/callback',async(req,res) => {
                 grant_type: "authorization_code"
             })
         })
-
         const tokenData = await tokenResponse.json()
         const accessToken = tokenData.access_token
         if(!accessToken) return res.status(400).json({message: "Access token not provided"})
-        
         const userResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{
             method: "GET",
             headers: {
-                "Authorization": `Bearer ${accessToken}`
+                "Authorization": `${accessToken}`
             }
         })
-        
         const googleUser = await userResponse.json()
-
         let user = await Users.findOne({email: googleUser.email})
         if(!user){
             user = new Users({
