@@ -2,6 +2,10 @@ import bcrypt from 'bcrypt'
 import { Users } from '../models/User.model.js'
 import Joi from 'joi'
 import express from 'express'
+import route from '../startup/route.js'
+import { authUrl, redirectUri } from '../utils/constant.js'
+import * as dotenv from "dotenv"
+dotenv.config()
 
 const router = express.Router()
 
@@ -30,6 +34,80 @@ router.post('/', async (req, res) => {
         })
     } catch(err:any){
         console.error("Login error",err)
+        res.status(500).json({success: false, message: "Internal server error ", error: err.message})
+    }
+})
+
+router.get('/auth/google', async(req,res) => {
+    try{
+        const params = new URLSearchParams({
+            client_id: "698443624904-f5hbb75u7v7k5il22onr25g38gsk873s.apps.googleusercontent.com",
+            redirect_uri: redirectUri,
+            response_type: 'code',
+            scope: "openid email profile"
+        })
+        res.redirect(`${authUrl}?${params.toString()}`)
+    } catch(err:any){
+        console.error("Google auth error",err)
+        res.status(500).json({success: false, message: "Internal server error ", error: err.message})
+    }
+})
+
+router.get('/auth/google/callback',async(req,res) => {
+    const code = req.query.code
+    if(!code) return res.status(400).json({message: "Authorization code not provided"})
+    
+    try{
+        const tokenResponse = await fetch("https://oauth2.googleapis.com/token",{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: new URLSearchParams({
+                code: code as string,
+                client_id: "698443624904-f5hbb75u7v7k5il22onr25g38gsk873s.apps.googleusercontent.com",
+                client_secret:"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",
+                redirect_uri: "http://localhost:3000/auth/google/callback",
+                grant_type: "authorization_code"
+            })
+        })
+
+        const tokenData = await tokenResponse.json()
+        const accessToken = tokenData.access_token
+        if(!accessToken) return res.status(400).json({message: "Access token not provided"})
+        
+        const userResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+        
+        const googleUser = await userResponse.json()
+
+        let user = await Users.findOne({email: googleUser.email})
+        if(!user){
+            user = new Users({
+                name: googleUser.name,
+                email: googleUser.email,
+                password: Math.random().toString(36).slice(-8)
+            })
+            await user.save()
+        }
+        //@ts-ignore
+        const token = user.generateAuthToken()
+        res.header('Authorization', token).json({
+            success: true,
+            message: "Login successful",
+            token,
+            data: {
+                _id: user._id,
+                name: user.name,
+                email: user.email
+            }
+        })
+    } catch(err:any){
+        console.error("Google auth error",err)
         res.status(500).json({success: false, message: "Internal server error ", error: err.message})
     }
 })
