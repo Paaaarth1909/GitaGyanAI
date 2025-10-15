@@ -1,3 +1,4 @@
+// import { Header } from "@/components/Header";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,17 +27,6 @@ export function Chat() {
   const {language} = useLanguage()
   const { listening, transcript, startListening } = useSpeechToText();
 
-  // const {
-  //     transcript,
-  //     listening,
-  //     browserSupportsSpeechRecognition
-  //   } = useSpeechRecognition();
-
-  //   if (!browserSupportsSpeechRecognition) {
-  //       alert("Browser doesn't support speech recognition.");
-  //   }
-  
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -60,8 +50,19 @@ export function Chat() {
     }
   }, [transcript, listening]);
 
- 
+  useEffect(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      const storedToken = localStorage.getItem('token');
+      if (token) {
+        localStorage.setItem('token', token);
+      }
+      
+      if(!token && !storedToken) {
+        navigate('/login');
+      }
 
+    }, []);
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
@@ -117,8 +118,6 @@ export function Chat() {
     }
   };
 
-
- 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -139,11 +138,6 @@ export function Chat() {
   //   "How to practice detachment?"
   // ];
 
-  useEffect(() => {
-  if (!token) {
-    navigate("/login");
-  }
-}, [token, navigate]);
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
