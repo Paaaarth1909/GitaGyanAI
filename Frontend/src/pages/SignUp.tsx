@@ -48,6 +48,11 @@ export function SignUp() {
 
     }
 
+    const handleGoogle = async() => {
+      setLoading(true);
+      window.location.href = `${Backend_Url}/login/auth/google`;
+    }
+
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
       <Card className="relative overflow-hidden w-full max-w-[95%] md:max-w-[30%] rounded-2xl shadow-xl border border-border/40 backdrop-blur bg-background/80">
@@ -101,6 +106,9 @@ export function SignUp() {
             <p className="text-sm text-destructive">{error}</p>
             <Button className="w-full rounded-xl py-5 font-semibold shadow-md hover:shadow-lg transition-all" disabled={loading} type="submit">
               {loading ? "Loading..." : "Create Account"}
+          </Button>
+          <Button variant="outline" type="button" className="flex items-center justify-center mx-auto" disabled={loading} onClick={handleGoogle}>
+              <img src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png" alt="google_icon" className="w-5 h-5"/> {loading ? 'Logging...' : (<span className="flex items-center">  Signup with Google</span>)}
           </Button>
           </form>
         </CardContent>
