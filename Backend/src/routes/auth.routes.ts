@@ -3,9 +3,10 @@ import { Users } from '../models/User.model.js'
 import Joi from 'joi'
 import express from 'express'
 import route from '../startup/route.js'
-import { authUrl, redirectUri } from '../utils/constant.js'
+import { authUrl, redirectUri , frontendUrl} from '../utils/constant.js'
 import * as dotenv from "dotenv"
 dotenv.config()
+
 
 const router = express.Router()
 
@@ -73,13 +74,15 @@ router.get('/auth/google/callback',async(req,res) => {
         const tokenData = await tokenResponse.json()
         const accessToken = tokenData.access_token
         if(!accessToken) return res.status(400).json({message: "Access token not provided"})
+
         const userResponse = await fetch("https://www.googleapis.com/oauth2/v2/userinfo",{
             method: "GET",
             headers: {
-                "Authorization": `${accessToken}`
+                "Authorization": `Bearer ${accessToken}`
             }
         })
         const googleUser = await userResponse.json()
+
         let user = await Users.findOne({email: googleUser.email})
         if(!user){
             user = new Users({
@@ -90,17 +93,11 @@ router.get('/auth/google/callback',async(req,res) => {
             await user.save()
         }
         //@ts-ignore
-        const token = user.generateAuthToken()
-        res.header('Authorization', token).json({
-            success: true,
-            message: "Login successful",
-            token,
-            data: {
-                _id: user._id,
-                name: user.name,
-                email: user.email
-            }
-        })
+        const token = user.generateAuthToken();
+
+        const FRONTEND_URL = frontendUrl
+        res.redirect(`${FRONTEND_URL}/chat?token=${token}`);
+
     } catch(err:any){
         console.error("Google auth error",err)
         res.status(500).json({success: false, message: "Internal server error ", error: err.message})
