@@ -41,7 +41,7 @@ export function Login() {
       localStorage.setItem("token", json?.token);
       navigate("/chat");
     } else {
-      setError("Login failed: " + json.message);
+      setError("Login failed: " + json?.message);
     }
     setLoading(false);
   };
@@ -68,6 +68,11 @@ export function Login() {
     }
   };
 
+
+  const handleSignInWithGoogle = () => {
+    setLoading(true);
+    window.location.href = `${Backend_Url}/login/auth/google`
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center  p-4 sm:p-6">
@@ -127,8 +132,12 @@ export function Login() {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col gap-3">
+          <Button variant="outline" type="button" className="relative flex items-center justify-center" disabled={loading} onClick={handleSignInWithGoogle}>
+             <img src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png" alt="google_icon" className="w-5 h-5"/> {loading ? 'Logging...' : (<span className="flex items-center">  Login with Google</span>)}
+          </Button>
           <Button variant="outline" type="button" className="relative flex items-center justify-center" disabled={loading} onClick={handleGuest}>
-             <UserIcon className="pt-1"/> {loading ? 'Logging...' : (<span className="flex items-center">  Login as Guest</span>)}</Button>
+             <UserIcon className="pt-1"/> {loading ? 'Logging...' : (<span className="flex items-center">  Login as Guest</span>)}
+          </Button>
           <p className="text-sm text-muted-foreground text-center my-4">
             Don't have an account?
             <Link
