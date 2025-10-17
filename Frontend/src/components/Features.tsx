@@ -1,4 +1,4 @@
-import { BookOpen, Heart, MessageCircle, Users ,BotIcon} from "lucide-react";
+import { BookOpen, Heart, MessageCircle,BotIcon} from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { motion } from "framer-motion";
 
@@ -9,32 +9,30 @@ export function Features() {
     }
     const features = [
         {
-        icon: MessageCircle,
-        title: "Sacred Conversations",
-        description: "Engage in meaningful dialogue with timeless wisdom from the Bhagavad Gita"
+            icon: MessageCircle,
+            title: "Sacred Conversations",
+            description: "Engage in meaningful dialogue with timeless wisdom from the Bhagavad Gita"
         },
         {
-        icon: BotIcon,
-        title: "RAG-Powered Guidance",
-        description: "Get precise, context-rich answers through Retrieval-Augmented Generation, ensuring responses are scripture-based, not generic."
+            icon: BotIcon,
+            title: "RAG-Powered Guidance",
+            description: "Get precise, context-rich answers through Retrieval-Augmented Generation, ensuring responses are scripture-based, not generic."
         },
         {
-        icon: BookOpen,
-        title: "Spiritual Guidance",
-        description: "Find answers to life's questions through ancient teachings and modern clarity"
+            icon: BookOpen,
+            title: "Spiritual Guidance",
+            description: "Find answers to life's questions through ancient teachings and modern clarity"
         },
         {
-        icon: Heart,
-        title: "Save Insights",
-        description: "Preserve the most profound responses in your personal collection of wisdom"
+            icon: Heart,
+            title: "Save Insights",
+            description: "Preserve the most profound responses in your personal collection of wisdom"
         },
-        {
-        icon: Users,
-        title: "Personalized Journey",
-        description: "Track your spiritual growth with saved conversations, personalized insights, and reflection tools."
-        },
-        
-        
+        // {
+        // icon: Users,
+        // title: "Personalized Journey",
+        // description: "Track your spiritual growth with saved conversations, personalized insights, and reflection tools."
+        // },
         
     ];
 
@@ -43,7 +41,7 @@ export function Features() {
             variants={fadeInUp}
               initial = "hidden"
               whileInView="visible"
-            //   viewport={{once:true}}
+              viewport={{once:true}}
         className="md:mx-16 px-4 py-40 relative z-10">
             <div className="text-center mb-16">
                 <h2 className="font-display text-5xl md:text-7xl font-bold text-primary  mb-4 wisdom-text">
