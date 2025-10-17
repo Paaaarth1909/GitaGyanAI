@@ -295,7 +295,7 @@ export function Chat() {
       </div>
 
       <footer className="flex-shrink-0 bg-white/95 backdrop-blur-md border-t border-orange-200/60 shadow-lg">
-        <div className="container mx-auto max-w-5xl px-6 py-5">
+        <div className="container mx-auto max-w-6xl px-6 py-4">
           <div className="flex items-end md:gap-4 gap-2">
             <div className="flex-1 relative">
               <Input
