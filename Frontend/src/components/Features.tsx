@@ -42,7 +42,7 @@ export function Features() {
               initial = "hidden"
               whileInView="visible"
               viewport={{once:true}}
-        className="md:mx-16 px-4 py-40 relative z-10">
+        className="md:mx-16 px-4 md:pt-40 py-20 relative z-10">
             <div className="text-center mb-16">
                 <h2 className="font-display text-5xl md:text-7xl font-bold text-primary  mb-4 wisdom-text">
                     Your Digital Sanctuary
