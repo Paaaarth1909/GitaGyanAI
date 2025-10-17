@@ -8,6 +8,7 @@ import { motion } from "motion/react"
 import { Krishna_Flute, Lotus_Image } from "@/utils/constant";
 import { TypingAnimation } from "@/components/magicui/typing-animation";
 import { useEffect, useRef, useState } from "react";
+import { MarqueeDemo } from "@/components/magicui/marquee";
 
 export function Home() {
     const [isOpen, setIsOpen] = useState(false);
@@ -159,6 +160,10 @@ export function Home() {
                 <div className="animate-slide-in-right animation-delay-1800 transform hover:scale-[1.01] transition-transform duration-700">
                     <Quote />
                 </div>
+                <div className="animate-slide-in-right animation-delay-1800 transform hover:scale-[1.01] transition-transform duration-700 my-8">
+                    <MarqueeDemo/>
+                </div>
+
 
                 <div className="py-32 text-center relative">
                     <div className="absolute inset-0 opacity-20">
