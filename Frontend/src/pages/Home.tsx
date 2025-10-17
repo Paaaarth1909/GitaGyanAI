@@ -9,7 +9,7 @@ import { Krishna_Flute, Lotus_Image } from "@/utils/constant";
 import { TypingAnimation } from "@/components/magicui/typing-animation";
 import { useEffect, useRef, useState } from "react";
 import { MarqueeDemo } from "@/components/magicui/marquee";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/react"
 
 export function Home() {
     const [isOpen, setIsOpen] = useState(false);
